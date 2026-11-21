@@ -1,0 +1,6 @@
+# TOH IR on the TOH DevKit (DEV mode, 6.2 kOhm ID -> vendor/product 0000/0000).
+# Installed by the toh-ir RPM next to the DevKit's own devkit.yaml; symbiosis merges the access lists of all
+# YAML files in this directory (address 0x42 is already listed in devkit.yaml, so it isn't repeated here).
+access:
+  i2c-dev:
+    - /usr/libexec/toh-ir/toh-ird

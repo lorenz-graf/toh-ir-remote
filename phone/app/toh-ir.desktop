@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=toh-ir
+Exec=sailfish-qml toh-ir
+Name=IR Remote
+
+[X-Sailjail]
+# talks to its own helper service on the session bus; no sandbox profile for that yet
+Sandboxing=Disabled
