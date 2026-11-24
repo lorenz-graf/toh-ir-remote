@@ -20,15 +20,15 @@ On the TOH DevKit's breadboard, with its RP2040-Zero (pin numbers as printed on 
 | Module | Pin | Zero |
 |---|---|---|
 | IR receiver (38 kHz, 1838-type module) | OUT | 14 |
-| | VCC | 3V3 |
+| | VCC | 28 |
 | | GND | GND |
 | IR transmitter (LED module) | DAT | 7 |
 | | VCC | 3V3 |
 | | GND | GND |
 
-- **Power both modules from 3V3, not 5V.** These receiver modules pull their output up to their own supply, and the RP2040's pins only take 3.3 V
+- **Never power the receiver from 5V.** These receiver modules pull their output up to their own supply, and the RP2040's pins only take 3.3 V. Since firmware 0.4 its VCC comes from pin 28 (3.3 V), which the firmware switches on only while learning, so the module's signal LED doesn't blink at every remote in the room
 - The DevKit firmware uses pin 14 for an LED (and holds it low), so remove that LED; the IR firmware doesn't use it
-- The transmitter module drives its LED straight from the pin (no transistor), so the range is probably short. Planned: an IR LED driven by a transistor (S8050) from 5 V
+- The transmitter module drives its LED straight from the pin (no transistor): only ~0.5–2 m. With the IR LED switched by an S8050 from 5 V (22 Ω, ~140 mA pulses; diagram `renders/ir-driver-wiring.png`) a TV reacted from about 10 m
 
 ## Firmware (`firmware/ir-fw/`)
 
@@ -36,7 +36,7 @@ Arduino sketch for the RP2040-Zero (core: Earle Philhower `rp2040:rp2040`, libra
 
 - **IR registers** (map at the top of `ir-fw.ino`): send buffer (durations as 16-bit microseconds, mark first) + carrier frequency, learn command, buffer for the recorded frame, checksums for both directions
 - **Fix for the DevKit's I²C lock-up:** a pending TX abort is cleared before answering a read. While the abort flag is set, the RP2040's TX FIFO discards writes, so the answer got lost and the chip held SCL low until a reset
-- **USB serial console** (115200) for debugging: prints every received frame; `t` sends a test code, `s` repeats the last received frame, `l` lets the receiver listen while sending (to check what goes out)
+- **USB serial console** (115200) for debugging: prints every received frame; `t` sends a test code, `s` repeats the last received frame, `l` lets the receiver listen while sending (to check what goes out), `r` keeps the receiver on to watch every frame
 
 Build:
 
