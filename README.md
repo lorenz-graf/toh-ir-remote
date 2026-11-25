@@ -30,6 +30,16 @@ On the TOH DevKit's breadboard, with its RP2040-Zero (pin numbers as printed on 
 - The DevKit firmware uses pin 14 for an LED (and holds it low), so remove that LED; the IR firmware doesn't use it
 - The transmitter module drives its LED straight from the pin (no transistor): only ~0.5–2 m. With the IR LED switched by an S8050 from 5 V (22 Ω, ~140 mA pulses; diagram `renders/ir-driver-wiring.png`) a TV reacted from about 10 m
 
+## Case (`model/`, not printed yet)
+
+Three printed parts, all in `model/` (STEP files in `model/step/`):
+
+- **`ir-cover.stl`:** cTOH-M back cover with a wide camera cutout, a 6.5 mm cable channel from the contact board up to the bump and two shallow notches where the LED and receiver run over it (print outside face down)
+- **`ir-bump.stl`:** a wide camera bump with a compartment on the phone side for a flat RP2040-Zero (USB-C and buttons desoldered, about 2 mm). The 5 mm IR LED (on the phone's back, through the lid) and the receiver (lying flat on the lid) stick out 2.5 mm towards the phone's top edge; a small cap (1.4 mm) covers them. A low ridge (0.7 mm) across the bump below the cameras makes the phone lying on its back rest on the cover's bottom edge and the ridge, with the cap just clear of the table, so it shouldn't rock. Print the cap side down, with supports from the build plate
+- **`ir-lid.stl`:** snaps in to close the compartment, with a cutout for the LED (print flat)
+
+`scripts/make_ir_bump.py` builds all three on top of the generic wide-bump parts from the [TOH DevKit](https://github.com/lorenz-graf/toh-devkit) (`model/wide-bump/`).
+
 ## Firmware (`firmware/ir-fw/`)
 
 Arduino sketch for the RP2040-Zero (core: Earle Philhower `rp2040:rp2040`, library: Adafruit NeoPixel). It contains the DevKit firmware (I²C target 0x42, same registers, so the DevKit app keeps working) plus:
@@ -66,6 +76,7 @@ The Jolla Phone 2026's kernel has an IR transmitter driver (`mtk-pwm-ir-tx`, `/d
 ## Licences
 
 - This repo: BSD-3-Clause ([LICENSE](LICENSE))
+- `model/` files are derived from Jolla's [toh-designs](https://github.com/sailfishos/toh-designs) (the cTOH-M community frame and camera bump), © 2026 Jolla Mobile Ltd, also BSD-3-Clause
 - Remote database: [Flipper-IRDB](https://github.com/UberGuidoZ/Flipper-IRDB), CC0, downloaded per remote
 - Universal remotes: [Flipper Zero firmware](https://github.com/flipperdevices/flipperzero-firmware) `infrared/assets/*.ir`, GPL-3.0, downloaded when you add one, not included
 
